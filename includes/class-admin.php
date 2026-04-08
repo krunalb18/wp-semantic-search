@@ -2,7 +2,7 @@
 /**
  * Admin settings page and bulk index UI.
  *
- * @package WP_Semantic_Search
+ * @package AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -20,8 +20,8 @@ class SemanticSearch_Admin {
 
 	public function add_menu(): void {
 		add_options_page(
-			'Semantic Search',
-			'Semantic Search',
+			'AI Semantic Search for Posts',
+			'AI Semantic Search for Posts',
 			'manage_options',
 			'semantic-search',
 			array($this, 'render_page')
@@ -49,17 +49,17 @@ class SemanticSearch_Admin {
 			return;
 		}
 
-		wp_enqueue_style('wp-semantic-search-admin', SS_PLUGIN_URL . 'assets/admin.css', array(), SS_VERSION);
-		wp_enqueue_script('wp-semantic-search-admin', SS_PLUGIN_URL . 'assets/admin.js', array(), SS_VERSION, true);
-		wp_localize_script('wp-semantic-search-admin', 'SS', array(
+		wp_enqueue_style('ai-semantic-search-for-posts-admin', SS_PLUGIN_URL . 'assets/admin.css', array(), SS_VERSION);
+		wp_enqueue_script('ai-semantic-search-for-posts-admin', SS_PLUGIN_URL . 'assets/admin.js', array(), SS_VERSION, true);
+		wp_localize_script('ai-semantic-search-for-posts-admin', 'SS', array(
 			'nonce' => wp_create_nonce('wp_rest'),
 			'restUrl' => rest_url('ss/v1/'),
 			'i18n' => array(
-				'testing' => __('Testing...', 'wp-semantic-search'),
-				'testOk' => __('Connection successful!', 'wp-semantic-search'),
-				'testFail' => __('Connection failed. Check your API key and try again.', 'wp-semantic-search'),
-				'indexDone' => __('Indexing complete!', 'wp-semantic-search'),
-				'indexStartFail' => __('Failed to start indexing. Please try again.', 'wp-semantic-search'),
+				'testing' => __('Testing...', 'ai-semantic-search-for-posts'),
+				'testOk' => __('Connection successful!', 'ai-semantic-search-for-posts'),
+				'testFail' => __('Connection failed. Check your API key and try again.', 'ai-semantic-search-for-posts'),
+				'indexDone' => __('Indexing complete!', 'ai-semantic-search-for-posts'),
+				'indexStartFail' => __('Failed to start indexing. Please try again.', 'ai-semantic-search-for-posts'),
 			),
 		));
 	}
@@ -68,23 +68,23 @@ class SemanticSearch_Admin {
 		$last_error = (string) get_option('ss_last_embedding_error', '');
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__('Semantic Search Settings', 'wp-semantic-search'); ?></h1>
+			<h1><?php echo esc_html__('AI Semantic Search for Posts Settings', 'ai-semantic-search-for-posts'); ?></h1>
 
 			<div class="notice notice-info">
 				<p>
-					<?php esc_html_e('This plugin sends your post content to external AI services (OpenAI or Google Gemini) to generate search embeddings. Data is transmitted to and processed by these third parties. Please review their privacy policies before use:', 'wp-semantic-search'); ?>
-					<a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('OpenAI Privacy Policy', 'wp-semantic-search'); ?></a>
+					<?php esc_html_e('This plugin sends your post content to external AI services (OpenAI or Google Gemini) to generate search embeddings. Data is transmitted to and processed by these third parties. Please review their privacy policies before use:', 'ai-semantic-search-for-posts'); ?>
+					<a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('OpenAI Privacy Policy', 'ai-semantic-search-for-posts'); ?></a>
 					&nbsp;|&nbsp;
-					<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Privacy Policy', 'wp-semantic-search'); ?></a>
+					<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Privacy Policy', 'ai-semantic-search-for-posts'); ?></a>
 				</p>
 			</div>
 
 			<?php if ($last_error !== '') : ?>
 				<div class="notice notice-error">
 					<p>
-						<strong><?php esc_html_e('Last embedding error:', 'wp-semantic-search'); ?></strong>
+						<strong><?php esc_html_e('Last embedding error:', 'ai-semantic-search-for-posts'); ?></strong>
 						<?php echo esc_html($last_error); ?>
-						&nbsp;<a href="<?php echo esc_url(add_query_arg('ss_clear_error', '1')); ?>"><?php esc_html_e('Dismiss', 'wp-semantic-search'); ?></a>
+						&nbsp;<a href="<?php echo esc_url(add_query_arg('ss_clear_error', '1')); ?>"><?php esc_html_e('Dismiss', 'ai-semantic-search-for-posts'); ?></a>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -94,59 +94,59 @@ class SemanticSearch_Admin {
 				<?php $provider = get_option('ss_embedding_provider', 'openai'); ?>
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e('Embedding Provider', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Embedding Provider', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<select name="ss_embedding_provider">
-								<option value="openai" <?php selected($provider, 'openai'); ?>><?php esc_html_e('OpenAI', 'wp-semantic-search'); ?></option>
-								<option value="gemini" <?php selected($provider, 'gemini'); ?>><?php esc_html_e('Google Gemini', 'wp-semantic-search'); ?></option>
+								<option value="openai" <?php selected($provider, 'openai'); ?>><?php esc_html_e('OpenAI', 'ai-semantic-search-for-posts'); ?></option>
+								<option value="gemini" <?php selected($provider, 'gemini'); ?>><?php esc_html_e('Google Gemini', 'ai-semantic-search-for-posts'); ?></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('OpenAI API Key', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('OpenAI API Key', 'ai-semantic-search-for-posts'); ?></th>
 						<td><input type="password" name="ss_openai_api_key" value="<?php echo esc_attr(get_option('ss_openai_api_key', '')); ?>" class="regular-text" /></td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Gemini API Key', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Gemini API Key', 'ai-semantic-search-for-posts'); ?></th>
 						<td><input type="password" name="ss_gemini_api_key" value="<?php echo esc_attr(get_option('ss_gemini_api_key', '')); ?>" class="regular-text" /></td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Embedding Model', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Embedding Model', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<select name="ss_embedding_model">
-								<option value="text-embedding-3-small" <?php selected(get_option('ss_embedding_model', 'text-embedding-3-small'), 'text-embedding-3-small'); ?>><?php esc_html_e('text-embedding-3-small (recommended)', 'wp-semantic-search'); ?></option>
-								<option value="text-embedding-3-large" <?php selected(get_option('ss_embedding_model', ''), 'text-embedding-3-large'); ?>><?php esc_html_e('text-embedding-3-large (higher quality)', 'wp-semantic-search'); ?></option>
-								<option value="gemini-embedding-001" <?php selected(get_option('ss_embedding_model', ''), 'gemini-embedding-001'); ?>><?php esc_html_e('gemini-embedding-001 (Gemini)', 'wp-semantic-search'); ?></option>
+								<option value="text-embedding-3-small" <?php selected(get_option('ss_embedding_model', 'text-embedding-3-small'), 'text-embedding-3-small'); ?>><?php esc_html_e('text-embedding-3-small (recommended)', 'ai-semantic-search-for-posts'); ?></option>
+								<option value="text-embedding-3-large" <?php selected(get_option('ss_embedding_model', ''), 'text-embedding-3-large'); ?>><?php esc_html_e('text-embedding-3-large (higher quality)', 'ai-semantic-search-for-posts'); ?></option>
+								<option value="gemini-embedding-001" <?php selected(get_option('ss_embedding_model', ''), 'gemini-embedding-001'); ?>><?php esc_html_e('gemini-embedding-001 (Gemini)', 'ai-semantic-search-for-posts'); ?></option>
 							</select>
-							<p class="description"><?php esc_html_e('Use OpenAI models with OpenAI provider, and Gemini embedding models with Gemini provider.', 'wp-semantic-search'); ?></p>
+							<p class="description"><?php esc_html_e('Use OpenAI models with OpenAI provider, and Gemini embedding models with Gemini provider.', 'ai-semantic-search-for-posts'); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Semantic Weight', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Semantic Weight', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<input type="range" name="ss_semantic_weight" min="0" max="1" step="0.1" value="<?php echo esc_attr(get_option('ss_semantic_weight', 0.7)); ?>" />
-							<p class="description"><?php esc_html_e('0 = pure keyword, 1 = pure semantic. Default 0.7.', 'wp-semantic-search'); ?></p>
+							<p class="description"><?php esc_html_e('0 = pure keyword, 1 = pure semantic. Default 0.7.', 'ai-semantic-search-for-posts'); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Minimum Final Score', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Minimum Final Score', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<input type="number" name="ss_min_final_score" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('ss_min_final_score', 0.28)); ?>" />
-							<p class="description"><?php esc_html_e('Drop results below this blended score.', 'wp-semantic-search'); ?></p>
+							<p class="description"><?php esc_html_e('Drop results below this blended score.', 'ai-semantic-search-for-posts'); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Minimum Semantic Score', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Minimum Semantic Score', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<input type="number" name="ss_min_semantic_score" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('ss_min_semantic_score', 0.30)); ?>" />
-							<p class="description"><?php esc_html_e('Drop semantically weak matches.', 'wp-semantic-search'); ?></p>
+							<p class="description"><?php esc_html_e('Drop semantically weak matches.', 'ai-semantic-search-for-posts'); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Low-Confidence Keyword Gate', 'wp-semantic-search'); ?></th>
+						<th scope="row"><?php esc_html_e('Low-Confidence Keyword Gate', 'ai-semantic-search-for-posts'); ?></th>
 						<td>
 							<input type="number" name="ss_keyword_gate_threshold" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('ss_keyword_gate_threshold', 0.35)); ?>" />
-							<p class="description"><?php esc_html_e('If final score is below this, require at least one keyword match.', 'wp-semantic-search'); ?></p>
+							<p class="description"><?php esc_html_e('If final score is below this, require at least one keyword match.', 'ai-semantic-search-for-posts'); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -154,26 +154,26 @@ class SemanticSearch_Admin {
 			</form>
 
 			<hr />
-			<h2><?php esc_html_e('Test API Connection', 'wp-semantic-search'); ?></h2>
-			<p><?php esc_html_e('Sends a test string to your configured embedding provider to verify the API key is working.', 'wp-semantic-search'); ?></p>
-			<button id="ss-test-connection" class="button"><?php esc_html_e('Test Connection', 'wp-semantic-search'); ?></button>
+			<h2><?php esc_html_e('Test API Connection', 'ai-semantic-search-for-posts'); ?></h2>
+			<p><?php esc_html_e('Sends a test string to your configured embedding provider to verify the API key is working.', 'ai-semantic-search-for-posts'); ?></p>
+			<button id="ss-test-connection" class="button"><?php esc_html_e('Test Connection', 'ai-semantic-search-for-posts'); ?></button>
 			<span id="ss-test-result" style="margin-left:12px;"></span>
 
 			<hr />
-			<h2><?php esc_html_e('Index Existing Posts', 'wp-semantic-search'); ?></h2>
+			<h2><?php esc_html_e('Index Existing Posts', 'ai-semantic-search-for-posts'); ?></h2>
 			<div id="ss-progress-wrap" style="display:none;max-width:500px;">
 				<div class="ss-progress-track">
 					<div id="ss-progress-bar" class="ss-progress-bar"></div>
 				</div>
-				<p id="ss-progress-label"><?php esc_html_e('Starting...', 'wp-semantic-search'); ?></p>
+				<p id="ss-progress-label"><?php esc_html_e('Starting...', 'ai-semantic-search-for-posts'); ?></p>
 			</div>
 			<div style="margin-bottom:10px;">
 				<label>
 					<input type="checkbox" id="ss-force-reindex" />
-					<?php esc_html_e('Force re-index all posts (includes already-indexed posts; uses more API calls)', 'wp-semantic-search'); ?>
+					<?php esc_html_e('Force re-index all posts (includes already-indexed posts; uses more API calls)', 'ai-semantic-search-for-posts'); ?>
 				</label>
 			</div>
-			<button id="ss-start-index" class="button button-primary"><?php esc_html_e('Start Bulk Index', 'wp-semantic-search'); ?></button>
+			<button id="ss-start-index" class="button button-primary"><?php esc_html_e('Start Bulk Index', 'ai-semantic-search-for-posts'); ?></button>
 		</div>
 		<?php
 	}

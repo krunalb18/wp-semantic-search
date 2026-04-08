@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       WP Semantic Search
- * Plugin URI:        https://github.com/krunalbalas/wp-semantic-search
+ * Plugin Name:       AI Semantic Search for Posts
+ * Plugin URI:        https://github.com/krunalbalas/ai-semantic-search-for-posts
  * Description:       Replaces WordPress default SQL search with AI-powered semantic search using OpenAI or Google Gemini embeddings. Understands meaning, not just keywords.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,11 +10,10 @@
  * Author URI:        https://github.com/krunalbalas
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       wp-semantic-search
+ * Text Domain:       ai-semantic-search-for-posts
  * Domain Path:       /languages
- * @package           WP_Semantic_Search
+ * @package           AI_Semantic_Search_For_Posts
  */
-
 if (!defined('ABSPATH')) {
 	exit;
 }
@@ -63,7 +62,7 @@ add_action('plugins_loaded', 'ss_load_textdomain');
 
 function ss_load_textdomain(): void {
 	load_plugin_textdomain(
-		'wp-semantic-search',
+		'ai-semantic-search-for-posts',
 		false,
 		dirname(plugin_basename(__FILE__)) . '/languages'
 	);
@@ -99,9 +98,9 @@ function ss_render_search_shortcode($atts = array()): string {
 }
 
 function ss_enqueue_frontend_assets(): void {
-	wp_enqueue_style('wp-semantic-search-frontend', SS_PLUGIN_URL . 'assets/search.css', array(), SS_VERSION);
-	wp_enqueue_script('wp-semantic-search-frontend', SS_PLUGIN_URL . 'assets/search.js', array(), SS_VERSION, true);
-	wp_localize_script('wp-semantic-search-frontend', 'SSFront', array(
+	wp_enqueue_style('ai-semantic-search-for-posts-frontend', SS_PLUGIN_URL . 'assets/search.css', array(), SS_VERSION);
+	wp_enqueue_script('ai-semantic-search-for-posts-frontend', SS_PLUGIN_URL . 'assets/search.js', array(), SS_VERSION, true);
+	wp_localize_script('ai-semantic-search-for-posts-frontend', 'SSFront', array(
 		'restUrl' => esc_url_raw(rest_url('ss/v1/search')),
 	));
 }

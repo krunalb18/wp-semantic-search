@@ -1,11 +1,11 @@
 {
 	"apiVersion": 3,
-	"name": "wp-semantic-search/search-block",
-	"title": "Semantic Search",
+	"name": "ai-semantic-search-for-posts/search-block",
+	"title": "AI Semantic Search for Posts",
 	"category": "widgets",
 	"icon": "search",
-	"description": "A basic search block for WP Semantic Search.",
-	"textdomain": "wp-semantic-search",
+	"description": "A basic search block for AI Semantic Search for Posts.",
+	"textdomain": "ai-semantic-search-for-posts",
 	"attributes": {
 		"placeholder": {
 			"type": "string",

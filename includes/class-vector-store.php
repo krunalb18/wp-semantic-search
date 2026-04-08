@@ -2,7 +2,7 @@
 /**
  * Database read/write for embedding vectors.
  *
- * @package WP_Semantic_Search
+ * @package AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 

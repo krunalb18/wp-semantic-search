@@ -2,7 +2,7 @@
 /**
  * Query processing, similarity ranking, and hybrid re-ranking.
  *
- * @package WP_Semantic_Search
+ * @package AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 

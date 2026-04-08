@@ -2,7 +2,7 @@
 /**
  * REST API endpoint registration and handlers.
  *
- * @package WP_Semantic_Search
+ * @package AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -97,14 +97,14 @@ class SemanticSearch_RestAPI {
 		if (!$client->is_configured()) {
 			return new WP_REST_Response(array(
 				'success' => false,
-				'message' => __('No API key configured.', 'wp-semantic-search'),
+				'message' => __('No API key configured.', 'ai-semantic-search-for-posts'),
 			), 200);
 		}
 
 		$result = $client->embed('semantic search test');
 
 		if (empty($result)) {
-			$last_error = get_option('ss_last_embedding_error', __('Unknown error.', 'wp-semantic-search'));
+			$last_error = get_option('ss_last_embedding_error', __('Unknown error.', 'ai-semantic-search-for-posts'));
 			return new WP_REST_Response(array(
 				'success' => false,
 				'message' => $last_error,

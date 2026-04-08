@@ -1,4 +1,4 @@
-=== WP Semantic Search ===
+=== AI Semantic Search for Posts ===
 Contributors: krunalbalas
 Tags: search, semantic search, AI search, OpenAI, embeddings
 Requires at least: 6.0
@@ -8,11 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-AI-powered semantic search for WordPress. Understands meaning, not just keywords. Powered by OpenAI or Google Gemini.
+AI-powered semantic search for WordPress posts. Understands meaning, not just keywords. Powered by OpenAI or Google Gemini.
 
 == Description ==
 
-WP Semantic Search replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
+AI Semantic Search for Posts replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
 
 **Example:** A user searching "heart workouts" will find your post titled "Best cardiovascular exercises" - even though no words overlap - because the meanings are similar.
 
@@ -48,7 +48,7 @@ Semantic search requires loading all embeddings into PHP memory for comparison. 
 
 == Installation ==
 
-1. Upload the `wp-semantic-search` folder to `/wp-content/plugins/`
+1. Upload the `ai-semantic-search-for-posts` folder to `/wp-content/plugins/`
 2. Activate the plugin through the **Plugins** menu in WordPress
 3. Go to **Settings -> Semantic Search**
 4. Enter your OpenAI or Google Gemini API key
@@ -99,11 +99,4 @@ The plugin has not been tested on WordPress Multisite and is not officially supp
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release. Run bulk indexing after activation to index existing posts.=== WP Semantic Search ===
-Contributors: copilot
-Tags: search, semantic, vector
-Requires at least: 6.0
-Tested up to: 6.6
-Stable tag: 0.1.0
-
-Basic boilerplate for a semantic search plugin.
+Initial release. Run bulk indexing after activation to index existing posts.

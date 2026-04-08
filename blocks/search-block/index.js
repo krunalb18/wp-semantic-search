@@ -8,8 +8,8 @@
 	const { InspectorControls } = wp.blockEditor;
 	const { PanelBody, TextControl } = wp.components;
 
-	registerBlockType('wp-semantic-search/search-block', {
-		title: 'Semantic Search',
+	registerBlockType('ai-semantic-search-for-posts/search-block', {
+		title: 'AI Semantic Search for Posts',
 		icon: 'search',
 		category: 'widgets',
 		attributes: {
