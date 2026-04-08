@@ -1,0 +1,16 @@
+{
+	"apiVersion": 3,
+	"name": "wp-semantic-search/search-block",
+	"title": "Semantic Search",
+	"category": "widgets",
+	"icon": "search",
+	"description": "A basic search block for WP Semantic Search.",
+	"textdomain": "wp-semantic-search",
+	"attributes": {
+		"placeholder": {
+			"type": "string",
+			"default": "Search..."
+		}
+	},
+	"editorScript": "file:./index.js"
+}

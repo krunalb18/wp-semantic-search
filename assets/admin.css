@@ -1,0 +1,14 @@
+.ss-progress-track {
+	background: #e0e0e0;
+	height: 20px;
+	border-radius: 4px;
+	max-width: 420px;
+	overflow: hidden;
+}
+
+.ss-progress-bar {
+	background: #2271b1;
+	height: 100%;
+	width: 0;
+	transition: width 0.3s;
+}
