@@ -14,7 +14,7 @@ export default function SearchBlock({ attributes }) {
 		setLoading(true);
 		try {
 			const restUrl = typeof wpApiSettings !== 'undefined' && wpApiSettings.root ? wpApiSettings.root : '/wp-json/';
-			const response = await fetch(`${restUrl}ss/v1/search?q=${encodeURIComponent(query)}&limit=10`);
+			const response = await fetch(`${restUrl}embedix/v1/search?q=${encodeURIComponent(query)}&limit=10`);
 			const data = await response.json();
 			setResults(data.results || []);
 		} finally {

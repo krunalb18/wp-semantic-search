@@ -1,5 +1,5 @@
-=== AI Semantic Search for Posts ===
-Contributors: krunalbalas
+=== Embedix AI Search for Posts ===
+Contributors: krunalb18
 Tags: search, semantic search, AI search, OpenAI, embeddings
 Requires at least: 6.0
 Tested up to: 6.9
@@ -12,7 +12,7 @@ AI-powered semantic search for WordPress posts. Understands meaning, not just ke
 
 == Description ==
 
-AI Semantic Search for Posts replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
+Embedix AI Search for Posts replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
 
 **Example:** A user searching "heart workouts" will find your post titled "Best cardiovascular exercises" - even though no words overlap - because the meanings are similar.
 

@@ -2,7 +2,7 @@
 /**
  * OpenAI and Gemini API communication.
  *
- * @package AI_Semantic_Search_For_Posts
+ * @package Embedix_AI_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class SemanticSearch_EmbeddingClient {
+class Embedix_EmbeddingClient {
 	private $provider;
 	private $openai_api_key;
 	private $gemini_api_key;
@@ -19,11 +19,11 @@ class SemanticSearch_EmbeddingClient {
 	private $gemini_api_base = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
 	public function __construct() {
-		$this->provider = (string) get_option('ss_embedding_provider', 'openai');
-		$this->openai_api_key = (string) get_option('ss_openai_api_key', '');
-		$this->gemini_api_key = (string) get_option('ss_gemini_api_key', '');
+		$this->provider = (string) get_option('embedix_embedding_provider', 'openai');
+		$this->openai_api_key = (string) get_option('embedix_openai_api_key', '');
+		$this->gemini_api_key = (string) get_option('embedix_gemini_api_key', '');
 
-		$configured_model = (string) get_option('ss_embedding_model', '');
+		$configured_model = (string) get_option('embedix_embedding_model', '');
 		$this->model = $configured_model !== ''
 			? $configured_model
 			: $this->default_model_for_provider($this->provider);
@@ -89,7 +89,7 @@ class SemanticSearch_EmbeddingClient {
 			return $response;
 		}
 
-		return $response ?: new WP_Error('ss_request_failed', 'All retry attempts failed.');
+		return $response ?: new WP_Error('embedix_request_failed', 'All retry attempts failed.');
 	}
 
 	private function embed_batch_with_openai(array $texts): array {
@@ -111,7 +111,7 @@ class SemanticSearch_EmbeddingClient {
 		if (is_wp_error($response)) {
 			$error_msg = 'OpenAI API error: ' . $response->get_error_message();
 			error_log($error_msg);
-			update_option('ss_last_embedding_error', $error_msg);
+			update_option('embedix_last_embedding_error', $error_msg);
 			return array();
 		}
 
@@ -123,7 +123,7 @@ class SemanticSearch_EmbeddingClient {
 				$error_msg .= ': ' . $body['error']['message'];
 			}
 			error_log($error_msg);
-			update_option('ss_last_embedding_error', $error_msg);
+			update_option('embedix_last_embedding_error', $error_msg);
 			return array();
 		}
 
@@ -173,7 +173,7 @@ class SemanticSearch_EmbeddingClient {
 		if (is_wp_error($response)) {
 			$error_msg = 'Gemini API error: ' . $response->get_error_message();
 			error_log($error_msg);
-			update_option('ss_last_embedding_error', $error_msg);
+			update_option('embedix_last_embedding_error', $error_msg);
 			return array();
 		}
 
@@ -185,7 +185,7 @@ class SemanticSearch_EmbeddingClient {
 				$error_msg .= ': ' . $body['error']['message'];
 			}
 			error_log($error_msg);
-			update_option('ss_last_embedding_error', $error_msg);
+			update_option('embedix_last_embedding_error', $error_msg);
 			return array();
 		}
 

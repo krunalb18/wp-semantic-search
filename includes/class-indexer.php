@@ -2,7 +2,7 @@
 /**
  * Post indexing and embedding job processor.
  *
- * @package AI_Semantic_Search_For_Posts
+ * @package Embedix_AI_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,11 +10,11 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class SemanticSearch_Indexer {
+class Embedix_Indexer {
 
 	public function __construct() {
 		add_action('save_post', array($this, 'on_save_post'), 10, 3);
-		add_action('ss_embed_post', array($this, 'process_embedding_job'));
+		add_action('embedix_embed_post', array($this, 'process_embedding_job'));
 		add_action('before_delete_post', array($this, 'delete_embeddings'));
 		add_action('wp_trash_post', array($this, 'delete_embeddings'));
 		add_action('untrashed_post', array($this, 'on_save_post'));
@@ -37,19 +37,19 @@ class SemanticSearch_Indexer {
 			return;
 		}
 
-		$allowed_types = get_option('ss_post_types', array('post', 'page'));
+		$allowed_types = get_option('embedix_post_types', array('post', 'page'));
 		if (!in_array($post->post_type, $allowed_types, true)) {
 			return;
 		}
 
-		$existing = wp_next_scheduled('ss_embed_post', array(array('post_id' => $post_id)));
+		$existing = wp_next_scheduled('embedix_embed_post', array(array('post_id' => $post_id)));
 		if ($existing) {
-			wp_unschedule_event($existing, 'ss_embed_post', array(array('post_id' => $post_id)));
+			wp_unschedule_event($existing, 'embedix_embed_post', array(array('post_id' => $post_id)));
 		}
 
 		wp_schedule_single_event(
 			time(),
-			'ss_embed_post',
+			'embedix_embed_post',
 			array(array('post_id' => $post_id))
 		);
 	}
@@ -80,17 +80,17 @@ class SemanticSearch_Indexer {
 
 		$this->delete_embeddings($post_id);
 
-		$client = new SemanticSearch_EmbeddingClient();
+		$client = new Embedix_EmbeddingClient();
 		$vectors = $client->embed_batch($chunks);
 		if (empty($vectors) || count($vectors) !== count($chunks)) {			
 			return false;
 		}
 
-		$store = new SemanticSearch_VectorStore();
+		$store = new Embedix_VectorStore();
 		$inserted = $store->upsert($post_id, $chunks, $vectors);
 
-		if (class_exists('SemanticSearch_Cache')) {
-			SemanticSearch_Cache::flush();
+		if (class_exists('Embedix_Cache')) {
+			Embedix_Cache::flush();
 		}
 
 		return $inserted > 0;
@@ -100,13 +100,13 @@ class SemanticSearch_Indexer {
 		global $wpdb;
 
 		$wpdb->delete(
-			$wpdb->prefix . 'ss_embeddings',
+			$wpdb->prefix . 'embedix_embeddings',
 			array('post_id' => $post_id),
 			array('%d')
 		);
 
-		if (class_exists('SemanticSearch_Cache')) {
-			SemanticSearch_Cache::flush();
+		if (class_exists('Embedix_Cache')) {
+			Embedix_Cache::flush();
 		}
 	}
 

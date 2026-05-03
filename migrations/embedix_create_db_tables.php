@@ -2,7 +2,7 @@
 /**
  * Database table creation on activation.
  *
- * @package AI_Semantic_Search_For_Posts
+ * @package Embedix_AI_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,12 +10,12 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-function ss_create_db_tables() {
+function embedix_create_db_tables() {
 	global $wpdb;
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-	$table_name = $wpdb->prefix . 'ss_embeddings';
+	$table_name = $wpdb->prefix . 'embedix_embeddings';
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE {$table_name} (

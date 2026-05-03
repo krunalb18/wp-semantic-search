@@ -1,0 +1,181 @@
+# Translation file for Embedix AI Search for Posts Plugin
+# Copyright (C) 2026 Krunal Balas
+# This file is distributed under the same license as the Embedix AI Search for Posts package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Embedix AI Search for Posts 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/krunalb18/ai-semantic-search-for-posts/issues\n"
+"POT-Creation-Date: 2026-05-03 10:31:21+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: includes/class-admin.php:128
+msgid "0 = pure keyword, 1 = pure semantic. Default 0.7."
+msgstr ""
+
+#: includes/class-admin.php:60
+msgid "Connection failed. Check your API key and try again."
+msgstr ""
+
+#: includes/class-admin.php:59
+msgid "Connection successful!"
+msgstr ""
+
+#: includes/class-admin.php:87
+msgid "Dismiss"
+msgstr ""
+
+#: includes/class-admin.php:135
+msgid "Drop results below this blended score."
+msgstr ""
+
+#: includes/class-admin.php:142
+msgid "Drop semantically weak matches."
+msgstr ""
+
+#: includes/class-admin.php:114
+msgid "Embedding Model"
+msgstr ""
+
+#: includes/class-admin.php:97
+msgid "Embedding Provider"
+msgstr ""
+
+#: includes/class-admin.php:71
+msgid "Embedix AI Search for Posts Settings"
+msgstr ""
+
+#: includes/class-admin.php:62
+msgid "Failed to start indexing. Please try again."
+msgstr ""
+
+#: includes/class-admin.php:173
+msgid "Force re-index all posts (includes already-indexed posts; uses more API calls)"
+msgstr ""
+
+#: includes/class-admin.php:110
+msgid "Gemini API Key"
+msgstr ""
+
+#: includes/class-admin.php:101
+msgid "Google Gemini"
+msgstr ""
+
+#: includes/class-admin.php:78
+msgid "Google Privacy Policy"
+msgstr ""
+
+#: includes/class-admin.php:149
+msgid "If final score is below this, require at least one keyword match."
+msgstr ""
+
+#: includes/class-admin.php:163
+msgid "Index Existing Posts"
+msgstr ""
+
+#: includes/class-admin.php:61
+msgid "Indexing complete!"
+msgstr ""
+
+#: includes/class-admin.php:85
+msgid "Last embedding error:"
+msgstr ""
+
+#: includes/class-admin.php:146
+msgid "Low-Confidence Keyword Gate"
+msgstr ""
+
+#: includes/class-admin.php:132
+msgid "Minimum Final Score"
+msgstr ""
+
+#: includes/class-admin.php:139
+msgid "Minimum Semantic Score"
+msgstr ""
+
+#: includes/class-rest-api.php:100
+msgid "No API key configured."
+msgstr ""
+
+#: includes/class-admin.php:100
+msgid "OpenAI"
+msgstr ""
+
+#: includes/class-admin.php:106
+msgid "OpenAI API Key"
+msgstr ""
+
+#: includes/class-admin.php:76
+msgid "OpenAI Privacy Policy"
+msgstr ""
+
+#: cli/class-cli-commands.php:79
+msgid "Please provide a search query."
+msgstr ""
+
+#: cli/class-cli-commands.php:57
+msgid "Queued %1$d posts for indexing. Skipped %2$d already indexed. Force: %3$s."
+msgstr ""
+
+#: includes/class-admin.php:125
+msgid "Semantic Weight"
+msgstr ""
+
+#: includes/class-admin.php:158
+msgid "Sends a test string to your configured embedding provider to verify the API key is working."
+msgstr ""
+
+#: includes/class-admin.php:176
+msgid "Start Bulk Index"
+msgstr ""
+
+#: includes/class-admin.php:168
+msgid "Starting..."
+msgstr ""
+
+#: includes/class-admin.php:157
+msgid "Test API Connection"
+msgstr ""
+
+#: includes/class-admin.php:159
+msgid "Test Connection"
+msgstr ""
+
+#: includes/class-admin.php:58
+msgid "Testing..."
+msgstr ""
+
+#: includes/class-admin.php:75
+msgid "This plugin sends your post content to external AI services (OpenAI or Google Gemini) to generate search embeddings. Data is transmitted to and processed by these third parties. Please review their privacy policies before use:"
+msgstr ""
+
+#: cli/class-cli-commands.php:69
+msgid "Total: %1$d | Done: %2$d | Remaining: %3$d | Status: %4$s"
+msgstr ""
+
+#: includes/class-rest-api.php:107
+msgid "Unknown error."
+msgstr ""
+
+#: includes/class-admin.php:121
+msgid "Use OpenAI models with OpenAI provider, and Gemini embedding models with Gemini provider."
+msgstr ""
+
+#: includes/class-admin.php:119
+msgid "gemini-embedding-001 (Gemini)"
+msgstr ""
+
+#: includes/class-admin.php:118
+msgid "text-embedding-3-large (higher quality)"
+msgstr ""
+
+#: includes/class-admin.php:117
+msgid "text-embedding-3-small (recommended)"
+msgstr ""
+
+#: cli/class-cli-commands.php:60
+msgid "yes"
+msgstr ""

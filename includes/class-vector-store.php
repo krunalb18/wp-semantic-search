@@ -2,7 +2,7 @@
 /**
  * Database read/write for embedding vectors.
  *
- * @package AI_Semantic_Search_For_Posts
+ * @package Embedix_AI_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class SemanticSearch_VectorStore {
+class Embedix_VectorStore {
 	public function nearest(array $query_vector, int $k = 20, array $filters = array()): array {
 		global $wpdb;
 
@@ -32,7 +32,7 @@ class SemanticSearch_VectorStore {
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT e.post_id, e.chunk_text, e.vector_blob
-				FROM {$wpdb->prefix}ss_embeddings e
+				FROM {$wpdb->prefix}embedix_embeddings e
 				INNER JOIN {$wpdb->posts} p ON p.ID = e.post_id
 				{$where}",
 				...$params
@@ -68,8 +68,8 @@ class SemanticSearch_VectorStore {
 
 	public function upsert(int $post_id, array $chunks, array $vectors): int {
 		global $wpdb;
-		$model = function_exists('ss_current_embedding_model')
-			? ss_current_embedding_model()
+		$model = function_exists('embedix_current_embedding_model')
+			? embedix_current_embedding_model()
 			: $this->default_model_for_current_provider();
 		$inserted = 0;
 
@@ -80,7 +80,7 @@ class SemanticSearch_VectorStore {
 
 			$vector_blob = pack('f*', ...$vectors[$index]);
 			$wpdb->replace(
-				$wpdb->prefix . 'ss_embeddings',
+				$wpdb->prefix . 'embedix_embeddings',
 				array(
 					'post_id' => $post_id,
 					'chunk_index' => $index,
@@ -109,7 +109,7 @@ class SemanticSearch_VectorStore {
 
 	public function delete_vectors_for_post($post_id) {
 		global $wpdb;
-		$wpdb->delete($wpdb->prefix . 'ss_embeddings', array('post_id' => (int) $post_id), array('%d'));
+		$wpdb->delete($wpdb->prefix . 'embedix_embeddings', array('post_id' => (int) $post_id), array('%d'));
 		return true;
 	}
 

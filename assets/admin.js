@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	var testResult = document.getElementById('ss-test-result');
 	var forceCheckbox = document.getElementById('ss-force-reindex');
 
-	if (typeof SS === 'undefined') {
+	if (typeof Embedix === 'undefined') {
 		return;
 	}
 
-	var i18n = SS.i18n || {};
+	var i18n = Embedix.i18n || {};
 
 	if (testButton && testResult) {
 		testButton.addEventListener('click', async function () {
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			testResult.style.color = '';
 
 			try {
-				var res = await fetch(SS.restUrl + 'test-connection', {
+				var res = await fetch(Embedix.restUrl + 'test-connection', {
 					method: 'POST',
 					headers: {
-						'X-WP-Nonce': SS.nonce,
+						'X-WP-Nonce': Embedix.nonce,
 						'Content-Type': 'application/json',
 					},
 				});
@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	async function pollStatus() {
 		try {
-			var res = await fetch(SS.restUrl + 'index-status', {
+			var res = await fetch(Embedix.restUrl + 'index-status', {
 				headers: {
-					'X-WP-Nonce': SS.nonce,
+					'X-WP-Nonce': Embedix.nonce,
 				},
 			});
 
@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		var forceReindex = forceCheckbox ? forceCheckbox.checked : false;
 
 		try {
-			await fetch(SS.restUrl + 'start-index', {
+			await fetch(Embedix.restUrl + 'start-index', {
 				method: 'POST',
 				headers: {
-					'X-WP-Nonce': SS.nonce,
+					'X-WP-Nonce': Embedix.nonce,
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({ force: forceReindex }),

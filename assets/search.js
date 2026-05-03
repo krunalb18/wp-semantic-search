@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-	var widgets = document.querySelectorAll('.ss-shortcode-search');
-	if (!widgets.length || typeof SSFront === 'undefined' || !SSFront.restUrl) {
+	var widgets = document.querySelectorAll('.embedix-shortcode-search');
+	if (!widgets.length || typeof EmbedixFront === 'undefined' || !EmbedixFront.restUrl) {
 		return;
 	}
 
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			results.innerHTML = '<p class="ss-muted">Searching...</p>';
 
 			try {
-				var url = SSFront.restUrl + '?q=' + encodeURIComponent(q) + '&limit=10';
+				var url = EmbedixFront.restUrl + '?q=' + encodeURIComponent(q) + '&limit=10';
 				var response = await fetch(url, { credentials: 'same-origin' });
 				var data = await response.json();
 				renderResults(data.results || []);
