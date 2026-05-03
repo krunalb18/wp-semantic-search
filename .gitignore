@@ -1,3 +1,4 @@
 .env
 docs/
 wp-cli.phar
+phpcs.xml

@@ -6,13 +6,13 @@
  * @license GPL-2.0-or-later
  */
 
-if (!defined('WP_UNINSTALL_PLUGIN')) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
 global $wpdb;
 
-$wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}embedix_embeddings");
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}embedix_embeddings" );
 
 $options = array(
 	'embedix_embedding_provider',
@@ -30,9 +30,9 @@ $options = array(
 	'embedix_index_status',
 );
 
-foreach ($options as $option) {
-	delete_option($option);
+foreach ( $options as $option ) {
+	delete_option( $option );
 }
 
-wp_clear_scheduled_hook('embedix_embed_post');
-wp_clear_scheduled_hook('embedix_process_bulk_batch');
+wp_clear_scheduled_hook( 'embedix_embed_post' );
+wp_clear_scheduled_hook( 'embedix_process_bulk_batch' );

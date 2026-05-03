@@ -6,7 +6,7 @@
  * @license GPL-2.0-or-later
  */
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,7 +15,7 @@ function embedix_create_db_tables() {
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-	$table_name = $wpdb->prefix . 'embedix_embeddings';
+	$table_name      = $wpdb->prefix . 'embedix_embeddings';
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE {$table_name} (
@@ -33,5 +33,5 @@ function embedix_create_db_tables() {
 		UNIQUE KEY uq_post_chunk (post_id, chunk_index)
 	) ENGINE=InnoDB {$charset_collate};";
 
-	dbDelta($sql);
+	dbDelta( $sql );
 }

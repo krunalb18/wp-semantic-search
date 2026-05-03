@@ -6,16 +6,16 @@
  * @license GPL-2.0-or-later
  */
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 class Embedix_Admin {
 	public function __construct() {
-		add_action('admin_menu', array($this, 'add_menu'));
-		add_action('admin_init', array($this, 'register_settings'));
-		add_action('admin_init', array($this, 'handle_clear_error'));
-		add_action('admin_enqueue_scripts', array($this, 'enqueue_assets'));
+		add_action( 'admin_menu', array( $this, 'add_menu' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'handle_clear_error' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
 	public function add_menu(): void {
@@ -24,129 +24,137 @@ class Embedix_Admin {
 			'Embedix AI Search for Posts',
 			'manage_options',
 			'semantic-search',
-			array($this, 'render_page')
+			array( $this, 'render_page' )
 		);
 	}
 
 	public function register_settings(): void {
-		register_setting('embedix_settings', 'embedix_embedding_provider', array('sanitize_callback' => 'sanitize_text_field'));
-		register_setting('embedix_settings', 'embedix_openai_api_key', array('sanitize_callback' => 'sanitize_text_field'));
-		register_setting('embedix_settings', 'embedix_gemini_api_key', array('sanitize_callback' => 'sanitize_text_field'));
-		register_setting('embedix_settings', 'embedix_embedding_model', array('sanitize_callback' => 'sanitize_text_field'));
-		register_setting('embedix_settings', 'embedix_post_types', array(
-			'sanitize_callback' => function ($value) {
-				return array_map('sanitize_text_field', (array) $value);
-			},
-		));
-		register_setting('embedix_settings', 'embedix_semantic_weight', array('sanitize_callback' => 'floatval'));
-		register_setting('embedix_settings', 'embedix_min_final_score', array('sanitize_callback' => 'floatval'));
-		register_setting('embedix_settings', 'embedix_min_semantic_score', array('sanitize_callback' => 'floatval'));
-		register_setting('embedix_settings', 'embedix_keyword_gate_threshold', array('sanitize_callback' => 'floatval'));
+		register_setting( 'embedix_settings', 'embedix_embedding_provider', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+		register_setting( 'embedix_settings', 'embedix_openai_api_key', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+		register_setting( 'embedix_settings', 'embedix_gemini_api_key', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+		register_setting( 'embedix_settings', 'embedix_embedding_model', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+		register_setting(
+			'embedix_settings',
+			'embedix_post_types',
+			array(
+				'sanitize_callback' => function ( $value ) {
+					return array_map( 'sanitize_text_field', (array) $value );
+				},
+			)
+		);
+		register_setting( 'embedix_settings', 'embedix_semantic_weight', array( 'sanitize_callback' => 'floatval' ) );
+		register_setting( 'embedix_settings', 'embedix_min_final_score', array( 'sanitize_callback' => 'floatval' ) );
+		register_setting( 'embedix_settings', 'embedix_min_semantic_score', array( 'sanitize_callback' => 'floatval' ) );
+		register_setting( 'embedix_settings', 'embedix_keyword_gate_threshold', array( 'sanitize_callback' => 'floatval' ) );
 	}
 
-	public function enqueue_assets(string $hook): void {
-		if ($hook !== 'settings_page_semantic-search') {
+	public function enqueue_assets( string $hook ): void {
+		if ( $hook !== 'settings_page_semantic-search' ) {
 			return;
 		}
 
-		wp_enqueue_style('embedix-ai-search-for-posts-admin', EMBEDIX_PLUGIN_URL . 'assets/admin.css', array(), EMBEDIX_VERSION);
-		wp_enqueue_script('embedix-ai-search-for-posts-admin', EMBEDIX_PLUGIN_URL . 'assets/admin.js', array(), EMBEDIX_VERSION, true);
-		wp_localize_script('embedix-ai-search-for-posts-admin', 'Embedix', array(
-			'nonce' => wp_create_nonce('wp_rest'),
-			'restUrl' => rest_url('embedix/v1/'),
-			'i18n' => array(
-				'testing' => __('Testing...', 'ai-semantic-search-for-posts'),
-				'testOk' => __('Connection successful!', 'ai-semantic-search-for-posts'),
-				'testFail' => __('Connection failed. Check your API key and try again.', 'ai-semantic-search-for-posts'),
-				'indexDone' => __('Indexing complete!', 'ai-semantic-search-for-posts'),
-				'indexStartFail' => __('Failed to start indexing. Please try again.', 'ai-semantic-search-for-posts'),
-			),
-		));
+		wp_enqueue_style( 'embedix-ai-search-for-posts-admin', EMBEDIX_PLUGIN_URL . 'assets/admin.css', array(), EMBEDIX_VERSION );
+		wp_enqueue_script( 'embedix-ai-search-for-posts-admin', EMBEDIX_PLUGIN_URL . 'assets/admin.js', array(), EMBEDIX_VERSION, true );
+		wp_localize_script(
+			'embedix-ai-search-for-posts-admin',
+			'Embedix',
+			array(
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'restUrl' => rest_url( 'embedix/v1/' ),
+				'i18n'    => array(
+					'testing'        => __( 'Testing...', 'ai-semantic-search-for-posts' ),
+					'testOk'         => __( 'Connection successful!', 'ai-semantic-search-for-posts' ),
+					'testFail'       => __( 'Connection failed. Check your API key and try again.', 'ai-semantic-search-for-posts' ),
+					'indexDone'      => __( 'Indexing complete!', 'ai-semantic-search-for-posts' ),
+					'indexStartFail' => __( 'Failed to start indexing. Please try again.', 'ai-semantic-search-for-posts' ),
+				),
+			)
+		);
 	}
 
 	public function render_page(): void {
-		$last_error = (string) get_option('embedix_last_embedding_error', '');
+		$last_error = (string) get_option( 'embedix_last_embedding_error', '' );
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__('Embedix AI Search for Posts Settings', 'ai-semantic-search-for-posts'); ?></h1>
+			<h1><?php echo esc_html__( 'Embedix AI Search for Posts Settings', 'ai-semantic-search-for-posts' ); ?></h1>
 
 			<div class="notice notice-info">
 				<p>
-					<?php esc_html_e('This plugin sends your post content to external AI services (OpenAI or Google Gemini) to generate search embeddings. Data is transmitted to and processed by these third parties. Please review their privacy policies before use:', 'ai-semantic-search-for-posts'); ?>
-					<a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('OpenAI Privacy Policy', 'ai-semantic-search-for-posts'); ?></a>
+					<?php esc_html_e( 'This plugin sends your post content to external AI services (OpenAI or Google Gemini) to generate search embeddings. Data is transmitted to and processed by these third parties. Please review their privacy policies before use:', 'ai-semantic-search-for-posts' ); ?>
+					<a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'OpenAI Privacy Policy', 'ai-semantic-search-for-posts' ); ?></a>
 					&nbsp;|&nbsp;
-					<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Google Privacy Policy', 'ai-semantic-search-for-posts'); ?></a>
+					<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Google Privacy Policy', 'ai-semantic-search-for-posts' ); ?></a>
 				</p>
 			</div>
 
-			<?php if ($last_error !== '') : ?>
+			<?php if ( $last_error !== '' ) : ?>
 				<div class="notice notice-error">
 					<p>
-						<strong><?php esc_html_e('Last embedding error:', 'ai-semantic-search-for-posts'); ?></strong>
-						<?php echo esc_html($last_error); ?>
-						&nbsp;<a href="<?php echo esc_url(add_query_arg('embedix_clear_error', '1')); ?>"><?php esc_html_e('Dismiss', 'ai-semantic-search-for-posts'); ?></a>
+						<strong><?php esc_html_e( 'Last embedding error:', 'ai-semantic-search-for-posts' ); ?></strong>
+						<?php echo esc_html( $last_error ); ?>
+						&nbsp;<a href="<?php echo esc_url( add_query_arg( 'embedix_clear_error', '1' ) ); ?>"><?php esc_html_e( 'Dismiss', 'ai-semantic-search-for-posts' ); ?></a>
 					</p>
 				</div>
 			<?php endif; ?>
 
 			<form method="post" action="options.php">
-				<?php settings_fields('embedix_settings'); ?>
-				<?php $provider = get_option('embedix_embedding_provider', 'openai'); ?>
+				<?php settings_fields( 'embedix_settings' ); ?>
+				<?php $provider = get_option( 'embedix_embedding_provider', 'openai' ); ?>
 				<table class="form-table">
 					<tr>
-						<th scope="row"><?php esc_html_e('Embedding Provider', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Embedding Provider', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
 							<select name="embedix_embedding_provider">
-								<option value="openai" <?php selected($provider, 'openai'); ?>><?php esc_html_e('OpenAI', 'ai-semantic-search-for-posts'); ?></option>
-								<option value="gemini" <?php selected($provider, 'gemini'); ?>><?php esc_html_e('Google Gemini', 'ai-semantic-search-for-posts'); ?></option>
+								<option value="openai" <?php selected( $provider, 'openai' ); ?>><?php esc_html_e( 'OpenAI', 'ai-semantic-search-for-posts' ); ?></option>
+								<option value="gemini" <?php selected( $provider, 'gemini' ); ?>><?php esc_html_e( 'Google Gemini', 'ai-semantic-search-for-posts' ); ?></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('OpenAI API Key', 'ai-semantic-search-for-posts'); ?></th>
-						<td><input type="password" name="embedix_openai_api_key" value="<?php echo esc_attr(get_option('embedix_openai_api_key', '')); ?>" class="regular-text" /></td>
+						<th scope="row"><?php esc_html_e( 'OpenAI API Key', 'ai-semantic-search-for-posts' ); ?></th>
+						<td><input type="password" name="embedix_openai_api_key" value="<?php echo esc_attr( get_option( 'embedix_openai_api_key', '' ) ); ?>" class="regular-text" /></td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Gemini API Key', 'ai-semantic-search-for-posts'); ?></th>
-						<td><input type="password" name="embedix_gemini_api_key" value="<?php echo esc_attr(get_option('embedix_gemini_api_key', '')); ?>" class="regular-text" /></td>
+						<th scope="row"><?php esc_html_e( 'Gemini API Key', 'ai-semantic-search-for-posts' ); ?></th>
+						<td><input type="password" name="embedix_gemini_api_key" value="<?php echo esc_attr( get_option( 'embedix_gemini_api_key', '' ) ); ?>" class="regular-text" /></td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Embedding Model', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Embedding Model', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
 							<select name="embedix_embedding_model">
-								<option value="text-embedding-3-small" <?php selected(get_option('embedix_embedding_model', 'text-embedding-3-small'), 'text-embedding-3-small'); ?>><?php esc_html_e('text-embedding-3-small (recommended)', 'ai-semantic-search-for-posts'); ?></option>
-								<option value="text-embedding-3-large" <?php selected(get_option('embedix_embedding_model', ''), 'text-embedding-3-large'); ?>><?php esc_html_e('text-embedding-3-large (higher quality)', 'ai-semantic-search-for-posts'); ?></option>
-								<option value="gemini-embedding-001" <?php selected(get_option('embedix_embedding_model', ''), 'gemini-embedding-001'); ?>><?php esc_html_e('gemini-embedding-001 (Gemini)', 'ai-semantic-search-for-posts'); ?></option>
+								<option value="text-embedding-3-small" <?php selected( get_option( 'embedix_embedding_model', 'text-embedding-3-small' ), 'text-embedding-3-small' ); ?>><?php esc_html_e( 'text-embedding-3-small (recommended)', 'ai-semantic-search-for-posts' ); ?></option>
+								<option value="text-embedding-3-large" <?php selected( get_option( 'embedix_embedding_model', '' ), 'text-embedding-3-large' ); ?>><?php esc_html_e( 'text-embedding-3-large (higher quality)', 'ai-semantic-search-for-posts' ); ?></option>
+								<option value="gemini-embedding-001" <?php selected( get_option( 'embedix_embedding_model', '' ), 'gemini-embedding-001' ); ?>><?php esc_html_e( 'gemini-embedding-001 (Gemini)', 'ai-semantic-search-for-posts' ); ?></option>
 							</select>
-							<p class="description"><?php esc_html_e('Use OpenAI models with OpenAI provider, and Gemini embedding models with Gemini provider.', 'ai-semantic-search-for-posts'); ?></p>
+							<p class="description"><?php esc_html_e( 'Use OpenAI models with OpenAI provider, and Gemini embedding models with Gemini provider.', 'ai-semantic-search-for-posts' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Semantic Weight', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Semantic Weight', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
-							<input type="range" name="embedix_semantic_weight" min="0" max="1" step="0.1" value="<?php echo esc_attr(get_option('embedix_semantic_weight', 0.7)); ?>" />
-							<p class="description"><?php esc_html_e('0 = pure keyword, 1 = pure semantic. Default 0.7.', 'ai-semantic-search-for-posts'); ?></p>
+							<input type="range" name="embedix_semantic_weight" min="0" max="1" step="0.1" value="<?php echo esc_attr( get_option( 'embedix_semantic_weight', 0.7 ) ); ?>" />
+							<p class="description"><?php esc_html_e( '0 = pure keyword, 1 = pure semantic. Default 0.7.', 'ai-semantic-search-for-posts' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Minimum Final Score', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Minimum Final Score', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
-							<input type="number" name="embedix_min_final_score" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('embedix_min_final_score', 0.28)); ?>" />
-							<p class="description"><?php esc_html_e('Drop results below this blended score.', 'ai-semantic-search-for-posts'); ?></p>
+							<input type="number" name="embedix_min_final_score" min="0" max="1" step="0.01" value="<?php echo esc_attr( get_option( 'embedix_min_final_score', 0.28 ) ); ?>" />
+							<p class="description"><?php esc_html_e( 'Drop results below this blended score.', 'ai-semantic-search-for-posts' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Minimum Semantic Score', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Minimum Semantic Score', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
-							<input type="number" name="embedix_min_semantic_score" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('embedix_min_semantic_score', 0.30)); ?>" />
-							<p class="description"><?php esc_html_e('Drop semantically weak matches.', 'ai-semantic-search-for-posts'); ?></p>
+							<input type="number" name="embedix_min_semantic_score" min="0" max="1" step="0.01" value="<?php echo esc_attr( get_option( 'embedix_min_semantic_score', 0.30 ) ); ?>" />
+							<p class="description"><?php esc_html_e( 'Drop semantically weak matches.', 'ai-semantic-search-for-posts' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e('Low-Confidence Keyword Gate', 'ai-semantic-search-for-posts'); ?></th>
+						<th scope="row"><?php esc_html_e( 'Low-Confidence Keyword Gate', 'ai-semantic-search-for-posts' ); ?></th>
 						<td>
-							<input type="number" name="embedix_keyword_gate_threshold" min="0" max="1" step="0.01" value="<?php echo esc_attr(get_option('embedix_keyword_gate_threshold', 0.35)); ?>" />
-							<p class="description"><?php esc_html_e('If final score is below this, require at least one keyword match.', 'ai-semantic-search-for-posts'); ?></p>
+							<input type="number" name="embedix_keyword_gate_threshold" min="0" max="1" step="0.01" value="<?php echo esc_attr( get_option( 'embedix_keyword_gate_threshold', 0.35 ) ); ?>" />
+							<p class="description"><?php esc_html_e( 'If final score is below this, require at least one keyword match.', 'ai-semantic-search-for-posts' ); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -154,38 +162,38 @@ class Embedix_Admin {
 			</form>
 
 			<hr />
-			<h2><?php esc_html_e('Test API Connection', 'ai-semantic-search-for-posts'); ?></h2>
-			<p><?php esc_html_e('Sends a test string to your configured embedding provider to verify the API key is working.', 'ai-semantic-search-for-posts'); ?></p>
-			<button id="ss-test-connection" class="button"><?php esc_html_e('Test Connection', 'ai-semantic-search-for-posts'); ?></button>
+			<h2><?php esc_html_e( 'Test API Connection', 'ai-semantic-search-for-posts' ); ?></h2>
+			<p><?php esc_html_e( 'Sends a test string to your configured embedding provider to verify the API key is working.', 'ai-semantic-search-for-posts' ); ?></p>
+			<button id="ss-test-connection" class="button"><?php esc_html_e( 'Test Connection', 'ai-semantic-search-for-posts' ); ?></button>
 			<span id="ss-test-result" style="margin-left:12px;"></span>
 
 			<hr />
-			<h2><?php esc_html_e('Index Existing Posts', 'ai-semantic-search-for-posts'); ?></h2>
+			<h2><?php esc_html_e( 'Index Existing Posts', 'ai-semantic-search-for-posts' ); ?></h2>
 			<div id="ss-progress-wrap" style="display:none;max-width:500px;">
 				<div class="ss-progress-track">
 					<div id="ss-progress-bar" class="ss-progress-bar"></div>
 				</div>
-				<p id="ss-progress-label"><?php esc_html_e('Starting...', 'ai-semantic-search-for-posts'); ?></p>
+				<p id="ss-progress-label"><?php esc_html_e( 'Starting...', 'ai-semantic-search-for-posts' ); ?></p>
 			</div>
 			<div style="margin-bottom:10px;">
 				<label>
 					<input type="checkbox" id="ss-force-reindex" />
-					<?php esc_html_e('Force re-index all posts (includes already-indexed posts; uses more API calls)', 'ai-semantic-search-for-posts'); ?>
+					<?php esc_html_e( 'Force re-index all posts (includes already-indexed posts; uses more API calls)', 'ai-semantic-search-for-posts' ); ?>
 				</label>
 			</div>
-			<button id="ss-start-index" class="button button-primary"><?php esc_html_e('Start Bulk Index', 'ai-semantic-search-for-posts'); ?></button>
+			<button id="ss-start-index" class="button button-primary"><?php esc_html_e( 'Start Bulk Index', 'ai-semantic-search-for-posts' ); ?></button>
 		</div>
 		<?php
 	}
 
 	public function handle_clear_error(): void {
 		if (
-			isset($_GET['embedix_clear_error'], $_GET['page']) &&
+			isset( $_GET['embedix_clear_error'], $_GET['page'] ) &&
 			$_GET['page'] === 'semantic-search' &&
-			current_user_can('manage_options')
+			current_user_can( 'manage_options' )
 		) {
-			delete_option('embedix_last_embedding_error');
-			wp_safe_redirect(remove_query_arg('embedix_clear_error'));
+			delete_option( 'embedix_last_embedding_error' );
+			wp_safe_redirect( remove_query_arg( 'embedix_clear_error' ) );
 			exit;
 		}
 	}
