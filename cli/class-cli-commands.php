@@ -55,10 +55,10 @@ class VecPost_CLI {
 		VecPost_WP_CLI::success(
 			sprintf(
 			/* translators: 1: number of queued posts, 2: number of skipped posts, 3: force flag */
-				__( 'Queued %1$d posts for indexing. Skipped %2$d already indexed. Force: %3$s.', 'vecpost-ai-semantic-search' ),
+				__( 'Queued %1$d posts for indexing. Skipped %2$d already indexed. Force: %3$s.', 'vecpost' ),
 				(int) $result['pending'],
 				(int) $result['skipped'],
-				$force ? __( 'yes', 'vecpost-ai-semantic-search' ) : __( 'no', 'vecpost-ai-semantic-search' )
+				$force ? __( 'yes', 'vecpost' ) : __( 'no', 'vecpost' )
 			)
 		);
 	}
@@ -69,7 +69,7 @@ class VecPost_CLI {
 		VecPost_WP_CLI::line(
 			sprintf(
 			/* translators: 1: total posts, 2: completed posts, 3: remaining posts, 4: status text */
-				__( 'Total: %1$d | Done: %2$d | Remaining: %3$d | Status: %4$s', 'vecpost-ai-semantic-search' ),
+				__( 'Total: %1$d | Done: %2$d | Remaining: %3$d | Status: %4$s', 'vecpost' ),
 				(int) $status['total'],
 				(int) $status['done'],
 				(int) $status['remaining'],
@@ -80,7 +80,7 @@ class VecPost_CLI {
 
 	public function search( array $args ): void {
 		if ( empty( $args[0] ) ) {
-			VecPost_WP_CLI::error( __( 'Please provide a search query.', 'vecpost-ai-semantic-search' ) );
+			VecPost_WP_CLI::error( __( 'Please provide a search query.', 'vecpost' ) );
 		}
 
 		$searcher = new VecPost_Search();

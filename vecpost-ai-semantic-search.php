@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       VecPost - AI Semantic Search for Posts
- * Plugin URI:        https://github.com/krunalb18/vecpost-ai-semantic-search
+ * Plugin Name:       VecPost AI Search for Posts
+ * Plugin URI:        https://github.com/krunalb18/vecpost
  * Description:       Replaces WordPress default SQL search with AI-powered semantic search using OpenAI or Google Gemini embeddings. Understands meaning, not just keywords.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,7 +10,7 @@
  * Author URI:        https://github.com/krunalb18
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       vecpost-ai-semantic-search
+ * Text Domain:       vecpost
  * Domain Path:       /languages
  *
  * @package           VecPost_AI_Semantic_Search_For_Posts

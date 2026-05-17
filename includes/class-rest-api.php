@@ -124,7 +124,7 @@ class VecPost_RestAPI {
 			return new WP_REST_Response(
 				array(
 					'success' => false,
-					'message' => __( 'No API key configured.', 'vecpost-ai-semantic-search' ),
+					'message' => __( 'No API key configured.', 'vecpost' ),
 				),
 				200
 			);
@@ -133,7 +133,7 @@ class VecPost_RestAPI {
 		$result = $client->embed( 'semantic search test' );
 
 		if ( empty( $result ) ) {
-			$last_error = get_option( 'vecpost_last_embedding_error', __( 'Unknown error.', 'vecpost-ai-semantic-search' ) );
+			$last_error = get_option( 'vecpost_last_embedding_error', __( 'Unknown error.', 'vecpost' ) );
 			return new WP_REST_Response(
 				array(
 					'success' => false,

@@ -1,11 +1,11 @@
 {
 	"apiVersion": 3,
 	"name": "vecpost-ai-search-for-posts/search-block",
-	"title": "VecPost - AI Semantic Search for Posts",
+	"title": "VecPost AI Search for Posts",
 	"category": "widgets",
 	"icon": "search",
-	"description": "A basic search block for VecPost - AI Semantic Search for Posts.",
-	"textdomain": "vecpost-ai-semantic-search",
+	"description": "A basic search block for VecPost AI Search for Posts.",
+	"textdomain": "vecpost",
 	"attributes": {
 		"placeholder": {
 			"type": "string",
