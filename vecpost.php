@@ -4,7 +4,7 @@
  * Plugin URI:        https://github.com/krunalb18/vecpost
  * Description:       Replaces WordPress default SQL search with AI-powered semantic search using OpenAI or Google Gemini embeddings. Understands meaning, not just keywords.
  * Version:           1.0.0
- * Requires at least: 6.0
+ * Requires at least: 6.1
  * Requires PHP:      7.4
  * Author:            Krunal Balas
  * Author URI:        https://github.com/krunalb18

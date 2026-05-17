@@ -10,12 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( '__' ) ) {
-	function __( $text, $domain = 'default' ) {
-		return $text;
-	}
-}
-
 class VecPost_WP_CLI {
 	public static function success( $message ): void {
 		if ( class_exists( 'WP_CLI' ) ) {

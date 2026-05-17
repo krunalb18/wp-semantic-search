@@ -1,7 +1,7 @@
 === VecPost AI Search for Posts ===
 Contributors: krunalb18
 Tags: search, semantic search, AI search, OpenAI, embeddings
-Requires at least: 6.0
+Requires at least: 6.1
 Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.0.0
