@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Embedix AI Search for Posts
- * Plugin URI:        https://github.com/krunalb18/ai-semantic-search-for-posts
+ * Plugin Name:       VecPost - AI Semantic Search for Posts
+ * Plugin URI:        https://github.com/krunalb18/vecpost-ai-semantic-search
  * Description:       Replaces WordPress default SQL search with AI-powered semantic search using OpenAI or Google Gemini embeddings. Understands meaning, not just keywords.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,10 +10,10 @@
  * Author URI:        https://github.com/krunalb18
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       ai-semantic-search-for-posts
+ * Text Domain:       vecpost-ai-semantic-search
  * Domain Path:       /languages
  *
- * @package           Embedix_AI_Search_For_Posts
+ * @package           VecPost_AI_Semantic_Search_For_Posts
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,6 +56,7 @@ function embedix_bootstrap() {
 
 	add_action( 'init', 'embedix_register_block' );
 	add_shortcode( 'embedix_semantic_search', 'embedix_render_search_shortcode' );
+	add_shortcode( 'vecpost_semantic_search', 'embedix_render_search_shortcode' );
 }
 add_action( 'plugins_loaded', 'embedix_bootstrap' );
 add_action( 'admin_init', 'embedix_check_model_version' );
@@ -81,15 +82,15 @@ function embedix_render_search_block( $attributes = array() ): string {
 	$placeholder = isset( $attributes['placeholder'] ) ? sanitize_text_field( $attributes['placeholder'] ) : 'Search...';
 	embedix_enqueue_frontend_assets();
 
-	return '<div class="embedix-shortcode-search" data-placeholder="' . esc_attr( $placeholder ) . '"></div>';
+	return '<div class="vecpost-shortcode-search" data-placeholder="' . esc_attr( $placeholder ) . '"></div>';
 }
 
 function embedix_render_search_shortcode( $atts = array() ): string {
-	$atts        = shortcode_atts( array( 'placeholder' => 'Search...' ), $atts, 'embedix_semantic_search' );
+	$atts        = shortcode_atts( array( 'placeholder' => 'Search...' ), $atts, 'vecpost_semantic_search' );
 	$placeholder = sanitize_text_field( $atts['placeholder'] );
 	embedix_enqueue_frontend_assets();
 
-	return '<div class="embedix-shortcode-search" data-placeholder="' . esc_attr( $placeholder ) . '"></div>';
+	return '<div class="vecpost-shortcode-search" data-placeholder="' . esc_attr( $placeholder ) . '"></div>';
 }
 
 function embedix_enqueue_frontend_assets(): void {
@@ -97,9 +98,16 @@ function embedix_enqueue_frontend_assets(): void {
 	wp_enqueue_script( 'embedix-ai-search-for-posts-frontend', EMBEDIX_PLUGIN_URL . 'assets/search.js', array(), EMBEDIX_VERSION, true );
 	wp_localize_script(
 		'embedix-ai-search-for-posts-frontend',
+		'VecPostFront',
+		array(
+			'restUrl' => esc_url_raw( rest_url( 'vecpost/v1/search' ) ),
+		)
+	);
+	wp_localize_script(
+		'embedix-ai-search-for-posts-frontend',
 		'EmbedixFront',
 		array(
-			'restUrl' => esc_url_raw( rest_url( 'embedix/v1/search' ) ),
+			'restUrl' => esc_url_raw( rest_url( 'vecpost/v1/search' ) ),
 		)
 	);
 }

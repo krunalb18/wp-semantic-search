@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-	var widgets = document.querySelectorAll('.embedix-shortcode-search');
-	if (!widgets.length || typeof EmbedixFront === 'undefined' || !EmbedixFront.restUrl) {
+	var widgets = document.querySelectorAll('.vecpost-shortcode-search');
+	var bridge = typeof VecPostFront !== 'undefined' ? VecPostFront : null;
+	if (!widgets.length || !bridge || !bridge.restUrl) {
 		return;
 	}
 
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			results.innerHTML = '<p class="ss-muted">Searching...</p>';
 
 			try {
-				var url = EmbedixFront.restUrl + '?q=' + encodeURIComponent(q) + '&limit=10';
+				var url = bridge.restUrl + '?q=' + encodeURIComponent(q) + '&limit=10';
 				var response = await fetch(url, { credentials: 'same-origin' });
 				var data = await response.json();
 				renderResults(data.results || []);

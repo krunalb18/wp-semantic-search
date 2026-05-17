@@ -2,7 +2,7 @@
 /**
  * Bulk indexing queue and cron batch processor.
  *
- * @package Embedix_AI_Search_For_Posts
+ * @package VecPost_AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,19 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Embedix_BulkIndexer {
+class VecPost_BulkIndexer {
 	const BATCH_SIZE    = 20;
 	const DELAY_SECONDS = 3;
-	const QUEUE_OPTION  = 'embedix_index_queue';
-	const STATUS_OPTION = 'embedix_index_status';
+	const QUEUE_OPTION  = 'vecpost_index_queue';
+	const STATUS_OPTION = 'vecpost_index_status';
 
 	public function __construct() {
-		add_action( 'embedix_process_bulk_batch', array( $this, 'process_batch' ) );
+		add_action( 'vecpost_process_bulk_batch', array( $this, 'process_batch' ) );
 	}
 
 	public function start_full_index( ?array $post_types = null, bool $force = false ): array {
 		if ( ! $post_types ) {
-			$post_types = get_option( 'embedix_post_types', array( 'post', 'page' ) );
+			$post_types = get_option( 'vecpost_post_types', array( 'post', 'page' ) );
 		}
 
 		$all_ids = get_posts(
@@ -34,14 +34,14 @@ class Embedix_BulkIndexer {
 			)
 		);
 
-		$current_model = function_exists( 'embedix_current_embedding_model' )
-			? embedix_current_embedding_model()
-			: (string) get_option( 'embedix_embedding_model', 'text-embedding-3-small' );
+		$current_model = function_exists( 'vecpost_current_embedding_model' )
+			? vecpost_current_embedding_model()
+			: (string) get_option( 'vecpost_embedding_model', 'text-embedding-3-small' );
 		$indexed_ids   = $this->get_indexed_post_ids( $current_model );
 		$pending       = $force ? $all_ids : array_values( array_diff( $all_ids, $indexed_ids ) );
 
-		while ( $timestamp = wp_next_scheduled( 'embedix_process_bulk_batch' ) ) {
-			wp_unschedule_event( $timestamp, 'embedix_process_bulk_batch' );
+		while ( $timestamp = wp_next_scheduled( 'vecpost_process_bulk_batch' ) ) {
+			wp_unschedule_event( $timestamp, 'vecpost_process_bulk_batch' );
 		}
 
 		update_option( self::QUEUE_OPTION, $pending, false );
@@ -58,7 +58,7 @@ class Embedix_BulkIndexer {
 			false
 		);
 
-		wp_schedule_single_event( time(), 'embedix_process_bulk_batch' );
+		wp_schedule_single_event( time(), 'vecpost_process_bulk_batch' );
 
 		return array(
 			'total'   => count( $all_ids ),
@@ -82,7 +82,7 @@ class Embedix_BulkIndexer {
 		$batch = array_splice( $queue, 0, self::BATCH_SIZE );
 		update_option( self::QUEUE_OPTION, $queue, false );
 
-		$indexer    = new Embedix_Indexer();
+		$indexer    = new VecPost_Indexer();
 		$successful = 0;
 		$failed     = 0;
 		foreach ( $batch as $post_id ) {
@@ -105,7 +105,7 @@ class Embedix_BulkIndexer {
 		update_option( self::STATUS_OPTION, $status, false );
 
 		if ( ! empty( $queue ) ) {
-			wp_schedule_single_event( time() + self::DELAY_SECONDS, 'embedix_process_bulk_batch' );
+			wp_schedule_single_event( time() + self::DELAY_SECONDS, 'vecpost_process_bulk_batch' );
 		} else {
 			$this->mark_complete();
 		}
@@ -164,7 +164,7 @@ class Embedix_BulkIndexer {
 
 		$ids = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT DISTINCT post_id FROM {$wpdb->prefix}embedix_embeddings WHERE model = %s AND stale = 0",
+				"SELECT DISTINCT post_id FROM {$wpdb->prefix}vecpost_embeddings WHERE model = %s AND stale = 0",
 				$model
 			)
 		);

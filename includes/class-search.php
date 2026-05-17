@@ -2,7 +2,7 @@
 /**
  * Query processing, similarity ranking, and hybrid re-ranking.
  *
- * @package Embedix_AI_Search_For_Posts
+ * @package VecPost_AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,35 +10,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Embedix_Search {
+class VecPost_Search {
 	public function search( string $query, int $limit = 10, array $filters = array() ): array {
 		if ( trim( $query ) === '' ) {
 			return array();
 		}
 
-		$alpha                  = (float) get_option( 'embedix_semantic_weight', 0.7 );
+		$alpha                  = (float) get_option( 'vecpost_semantic_weight', 0.7 );
 		$alpha                  = max( 0.0, min( 1.0, $alpha ) );
-		$min_final_score        = (float) get_option( 'embedix_min_final_score', 0.18 );
-		$min_semantic_score     = (float) get_option( 'embedix_min_semantic_score', 0.20 );
-		$keyword_gate_threshold = (float) get_option( 'embedix_keyword_gate_threshold', 0.35 );
+		$min_final_score        = (float) get_option( 'vecpost_min_final_score', 0.18 );
+		$min_semantic_score     = (float) get_option( 'vecpost_min_semantic_score', 0.20 );
+		$keyword_gate_threshold = (float) get_option( 'vecpost_keyword_gate_threshold', 0.35 );
 		$min_final_score        = max( 0.0, min( 1.0, $min_final_score ) );
 		$min_semantic_score     = max( 0.0, min( 1.0, $min_semantic_score ) );
 		$keyword_gate_threshold = max( 0.0, min( 1.0, $keyword_gate_threshold ) );
 
-		$cache_key = 'embedix_' . md5( $query . '|' . $limit . '|' . $alpha . '|' . $min_final_score . '|' . $min_semantic_score . '|' . $keyword_gate_threshold . '|' . maybe_serialize( $filters ) );
-		$cached    = wp_cache_get( $cache_key, 'embedix_search' );
+		$cache_key = 'vecpost_' . md5( $query . '|' . $limit . '|' . $alpha . '|' . $min_final_score . '|' . $min_semantic_score . '|' . $keyword_gate_threshold . '|' . maybe_serialize( $filters ) );
+		$cached    = wp_cache_get( $cache_key, 'vecpost_search' );
 		if ( $cached !== false ) {
 			return $cached;
 		}
 
-		$client       = new Embedix_EmbeddingClient();
+		$client       = new VecPost_EmbeddingClient();
 		$query_vector = $client->embed( $query );
 
 		if ( empty( $query_vector ) ) {
 			return array();
 		}
 
-		$store       = new Embedix_VectorStore();
+		$store       = new VecPost_VectorStore();
 		$candidates  = $store->nearest( $query_vector, 20, $filters );
 		$query_terms = $this->extract_query_terms( $query );
 
@@ -47,7 +47,7 @@ class Embedix_Search {
 		$deduped = $this->dedup_by_post( $ranked, $limit );
 		$results = $this->hydrate( $deduped, $query_terms );
 
-		wp_cache_set( $cache_key, $results, 'embedix_search', 3600 );
+		wp_cache_set( $cache_key, $results, 'vecpost_search', 3600 );
 
 		return $results;
 	}

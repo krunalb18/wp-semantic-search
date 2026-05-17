@@ -2,7 +2,7 @@
 /**
  * OpenAI and Gemini API communication.
  *
- * @package Embedix_AI_Search_For_Posts
+ * @package VecPost_AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Embedix_EmbeddingClient {
+class VecPost_EmbeddingClient {
 	private $provider;
 	private $openai_api_key;
 	private $gemini_api_key;
@@ -19,11 +19,11 @@ class Embedix_EmbeddingClient {
 	private $gemini_api_base = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
 	public function __construct() {
-		$this->provider       = (string) get_option( 'embedix_embedding_provider', 'openai' );
-		$this->openai_api_key = (string) get_option( 'embedix_openai_api_key', '' );
-		$this->gemini_api_key = (string) get_option( 'embedix_gemini_api_key', '' );
+		$this->provider       = (string) get_option( 'vecpost_embedding_provider', 'openai' );
+		$this->openai_api_key = (string) get_option( 'vecpost_openai_api_key', '' );
+		$this->gemini_api_key = (string) get_option( 'vecpost_gemini_api_key', '' );
 
-		$configured_model = (string) get_option( 'embedix_embedding_model', '' );
+		$configured_model = (string) get_option( 'vecpost_embedding_model', '' );
 		$this->model      = $configured_model !== ''
 			? $configured_model
 			: $this->default_model_for_provider( $this->provider );
@@ -94,7 +94,7 @@ class Embedix_EmbeddingClient {
 			return $response;
 		}
 
-		return $response ?: new WP_Error( 'embedix_request_failed', 'All retry attempts failed.' );
+		return $response ?: new WP_Error( 'vecpost_request_failed', 'All retry attempts failed.' );
 	}
 
 	private function embed_batch_with_openai( array $texts ): array {
@@ -120,7 +120,7 @@ class Embedix_EmbeddingClient {
 		if ( is_wp_error( $response ) ) {
 			$error_msg = 'OpenAI API error: ' . $response->get_error_message();
 			error_log( $error_msg );
-			update_option( 'embedix_last_embedding_error', $error_msg );
+			update_option( 'vecpost_last_embedding_error', $error_msg );
 			return array();
 		}
 
@@ -132,7 +132,7 @@ class Embedix_EmbeddingClient {
 				$error_msg .= ': ' . $body['error']['message'];
 			}
 			error_log( $error_msg );
-			update_option( 'embedix_last_embedding_error', $error_msg );
+			update_option( 'vecpost_last_embedding_error', $error_msg );
 			return array();
 		}
 
@@ -196,7 +196,7 @@ class Embedix_EmbeddingClient {
 		if ( is_wp_error( $response ) ) {
 			$error_msg = 'Gemini API error: ' . $response->get_error_message();
 			error_log( $error_msg );
-			update_option( 'embedix_last_embedding_error', $error_msg );
+			update_option( 'vecpost_last_embedding_error', $error_msg );
 			return array();
 		}
 
@@ -208,7 +208,7 @@ class Embedix_EmbeddingClient {
 				$error_msg .= ': ' . $body['error']['message'];
 			}
 			error_log( $error_msg );
-			update_option( 'embedix_last_embedding_error', $error_msg );
+			update_option( 'vecpost_last_embedding_error', $error_msg );
 			return array();
 		}
 

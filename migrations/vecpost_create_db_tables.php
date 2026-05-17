@@ -10,12 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function embedix_create_db_tables() {
+function vecpost_create_db_tables() {
 	global $wpdb;
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-	$table_name      = $wpdb->prefix . 'embedix_embeddings';
+	$table_name      = $wpdb->prefix . 'vecpost_embeddings';
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE {$table_name} (

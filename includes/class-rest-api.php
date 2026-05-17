@@ -2,7 +2,7 @@
 /**
  * REST API endpoint registration and handlers.
  *
- * @package Embedix_AI_Search_For_Posts
+ * @package VecPost_AI_Semantic_Search_For_Posts
  * @license GPL-2.0-or-later
  */
 
@@ -10,14 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Embedix_RestAPI {
+class VecPost_RestAPI {
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
 	public function register_routes() {
+		$this->register_namespace( 'vecpost/v1' );
+	}
+
+	private function register_namespace( string $namespace ): void {
 		register_rest_route(
-			'embedix/v1',
+			$namespace,
 			'/search',
 			array(
 				'methods'             => 'GET',
@@ -38,7 +42,7 @@ class Embedix_RestAPI {
 		);
 
 		register_rest_route(
-			'embedix/v1',
+			$namespace,
 			'/index-status',
 			array(
 				'methods'             => 'GET',
@@ -51,7 +55,7 @@ class Embedix_RestAPI {
 		);
 
 		register_rest_route(
-			'embedix/v1',
+			$namespace,
 			'/start-index',
 			array(
 				'methods'             => 'POST',
@@ -64,7 +68,7 @@ class Embedix_RestAPI {
 		);
 
 		register_rest_route(
-			'embedix/v1',
+			$namespace,
 			'/test-connection',
 			array(
 				'methods'             => 'POST',
@@ -81,7 +85,7 @@ class Embedix_RestAPI {
 		$query = (string) $request->get_param( 'q' );
 		$limit = min( 20, (int) $request->get_param( 'limit' ) );
 
-		$search       = new Embedix_Search();
+		$search       = new VecPost_Search();
 		$results      = $search->search( $query, $limit );
 		$safe_results = array_map(
 			function ( $result ) {
@@ -101,12 +105,12 @@ class Embedix_RestAPI {
 	}
 
 	public function handle_index_status(): WP_REST_Response {
-		$indexer = new Embedix_BulkIndexer();
+		$indexer = new VecPost_BulkIndexer();
 		return new WP_REST_Response( $indexer->get_status(), 200 );
 	}
 
 	public function handle_start_index( WP_REST_Request $request ): WP_REST_Response {
-		$indexer   = new Embedix_BulkIndexer();
+		$indexer   = new VecPost_BulkIndexer();
 		$force_raw = $request->get_param( 'force' );
 		$force     = in_array( $force_raw, array( 1, '1', true, 'true', 'yes', 'on' ), true );
 		$result    = $indexer->start_full_index( null, $force );
@@ -114,13 +118,13 @@ class Embedix_RestAPI {
 	}
 
 	public function handle_test_connection(): WP_REST_Response {
-		$client = new Embedix_EmbeddingClient();
+		$client = new VecPost_EmbeddingClient();
 
 		if ( ! $client->is_configured() ) {
 			return new WP_REST_Response(
 				array(
 					'success' => false,
-					'message' => __( 'No API key configured.', 'ai-semantic-search-for-posts' ),
+					'message' => __( 'No API key configured.', 'vecpost-ai-semantic-search' ),
 				),
 				200
 			);
@@ -129,7 +133,7 @@ class Embedix_RestAPI {
 		$result = $client->embed( 'semantic search test' );
 
 		if ( empty( $result ) ) {
-			$last_error = get_option( 'embedix_last_embedding_error', __( 'Unknown error.', 'ai-semantic-search-for-posts' ) );
+			$last_error = get_option( 'vecpost_last_embedding_error', __( 'Unknown error.', 'vecpost-ai-semantic-search' ) );
 			return new WP_REST_Response(
 				array(
 					'success' => false,

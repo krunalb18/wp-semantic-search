@@ -1,4 +1,4 @@
-=== Embedix AI Search for Posts ===
+=== VecPost - AI Semantic Search for Posts ===
 Contributors: krunalb18
 Tags: search, semantic search, AI search, OpenAI, embeddings
 Requires at least: 6.0
@@ -12,7 +12,7 @@ AI-powered semantic search for WordPress posts. Understands meaning, not just ke
 
 == Description ==
 
-Embedix AI Search for Posts replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
+VecPost - AI Semantic Search for Posts replaces WordPress's default SQL LIKE search with vector-based semantic search. Instead of matching exact words, it understands the *meaning* of a search query.
 
 **Example:** A user searching "heart workouts" will find your post titled "Best cardiovascular exercises" - even though no words overlap - because the meanings are similar.
 
@@ -26,10 +26,10 @@ Embedix AI Search for Posts replaces WordPress's default SQL LIKE search with ve
 
 * Semantic search powered by OpenAI (`text-embedding-3-small` or `text-embedding-3-large`) or Google Gemini (`gemini-embedding-001`)
 * Hybrid re-ranking: combines semantic similarity with keyword matching for best results
-* Gutenberg block and shortcode `[semantic_search]` for easy placement
+* Gutenberg block and shortcode `[vecpost_semantic_search]` for easy placement
 * Bulk indexer with progress bar for existing posts
-* WP-CLI support: `wp semantic-search index`, `wp semantic-search status`, `wp semantic-search search "query"`
-* Configurable scoring thresholds via Settings -> Semantic Search
+* WP-CLI support: `wp vecpost-semantic-search index`, `wp vecpost-semantic-search status`, `wp vecpost-semantic-search search "query"`
+* Configurable scoring thresholds via Settings -> VecPost - AI Semantic Search for Posts
 * Automatic re-indexing when you switch embedding models
 * Results cached via WordPress object cache (Redis/Memcached compatible)
 
@@ -48,13 +48,13 @@ Semantic search requires loading all embeddings into PHP memory for comparison. 
 
 == Installation ==
 
-1. Upload the `ai-semantic-search-for-posts` folder to `/wp-content/plugins/`
+1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin through the **Plugins** menu in WordPress
-3. Go to **Settings -> Semantic Search**
+3. Go to **Settings -> VecPost - AI Semantic Search for Posts**
 4. Enter your OpenAI or Google Gemini API key
 5. Click **Test Connection** to verify the key works
 6. Click **Start Bulk Index** to index your existing posts
-7. Add the search block to any page via the Gutenberg editor, or use the shortcode `[semantic_search]`
+7. Add the search block to any page via the Gutenberg editor, or use the shortcode `[vecpost_semantic_search]`
 
 == Frequently Asked Questions ==
 

@@ -8,8 +8,8 @@
 	const { InspectorControls } = wp.blockEditor;
 	const { PanelBody, TextControl } = wp.components;
 
-	registerBlockType('embedix-ai-search-for-posts/search-block', {
-		title: 'Embedix AI Search for Posts',
+	registerBlockType('vecpost-ai-search-for-posts/search-block', {
+		title: 'VecPost - AI Semantic Search for Posts',
 		icon: 'search',
 		category: 'widgets',
 		attributes: {
